@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VELORA — Exceptional Architectural Residences</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- GSAP Animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        obsidian: '#0B0C0E',
+                        charcoal: '#14161A',
+                        panel: '#1C1F26',
+                        gold: '#D4AF37',
+                        champagne: '#E5C158',
+                        warmIvory: '#F9F8F3',
+                        sand: '#D8D3C5',
+                        stoneGrey: '#8E929A'
+                    },
+                    fontFamily: {
+                        serif: ['Cinzel', 'serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #0B0C0E;
+            color: #F9F8F3;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0B0C0E; }
+        ::-webkit-scrollbar-thumb { background: #D4AF37; border-radius: 3px; }
+
+        /* Custom Cursor */
+        @media (min-width: 1024px) {
+            body { cursor: default; }
+            .custom-cursor {
+                width: 20px;
+                height: 20px;
+                border: 1px solid rgba(212, 175, 55, 0.6);
+                border-radius: 50%;
+                position: fixed;
+                pointer-events: none;
+                z-index: 9999;
+                transition: transform 0.15s ease-out, background-color 0.2s ease, width 0.2s ease, height 0.2s ease;
+                transform: translate(-50%, -50%);
+            }
+            .custom-cursor-dot {
+                width: 4px;
+                height: 4px;
+                background-color: #D4AF37;
+                border-radius: 50%;
+                position: fixed;
+                pointer-events: none;
+                z-index: 10000;
+                transform: translate(-50%, -50%);
+            }
+        }
+
+        .gold-border-glow {
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.15);
+        }
+
+        .editorial-shadow {
+            text-shadow: 0 4px 30px rgba(0, 0, 0, 0.7);
+        }
+
+        .glass-luxury {
+            background: rgba(20, 22, 26, 0.75);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="selection:bg-gold selection:text-obsidian">
+
+    <!-- Custom Pointer Elements -->
+    <div id="cursor" class="custom-cursor hidden lg:block"></div>
+    <div id="cursor-dot" class="custom-cursor-dot hidden lg:block"></div>
+
+    <!-- 01 — THE WOW OPENING SEQUENCE -->
+    <div id="loader" class="fixed inset-0 z-[100] bg-obsidian flex flex-col justify-between p-8 sm:p-12 transition-opacity duration-700">
+        <div class="flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <svg class="w-8 h-8 text-gold" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4">
+                    <path d="M20 80 L50 20 L80 80 L65 80 L50 45 L35 80 Z" />
+                    <circle cx="50" cy="20" r="4" fill="#D4AF37" />
+                </svg>
+                <span class="font-serif tracking-[0.3em] text-xs text-gold uppercase">VELORA</span>
+            </div>
+            <button onclick="skipLoader()" class="text-xs tracking-widest text-stoneGrey hover:text-gold uppercase transition-colors">
+                SKIP INTRO [X]
+            </button>
+        </div>
+
+        <div class="max-w-xl space-y-6">
+            <div class="overflow-hidden">
+                <h1 id="loader-title" class="font-serif text-3xl sm:text-5xl font-light tracking-wider text-warmIvory transform translate-y-full">
+                    A NEW PERSPECTIVE.
+                </h1>
+            </div>
+            <p id="loader-sub" class="text-stoneGrey text-xs sm:text-sm font-light tracking-widest uppercase opacity-0">
+                Exceptional spaces • Distinctive architecture • Inspired living
+            </p>
+        </div>
+
+        <div class="space-y-4">
+            <div class="flex justify-between items-end text-xs font-serif text-gold tracking-widest">
+                <span>LOADING RESIDENCES</span>
+                <span id="loader-counter" class="text-2xl font-bold">01</span>
+            </div>
+            <div class="w-full h-[2px] bg-charcoal overflow-hidden">
+                <div id="loader-bar" class="h-full bg-gradient-to-r from-gold via-champagne to-warmIvory w-0 transition-all ease-out"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NAVIGATION HEADER -->
+    <header class="fixed top-0 left-0 w-full z-40 px-6 sm:px-12 py-5 transition-all duration-500" id="header">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <!-- Brand Logo -->
+            <a href="#" class="flex items-center gap-3 group">
+                <div class="w-10 h-10 border border-gold/40 flex items-center justify-center rounded-none group-hover:border-gold transition-colors">
+                    <svg class="w-5 h-5 text-gold group-hover:scale-110 transition-transform" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="5">
+                        <path d="M20 80 L50 20 L80 80 L65 80 L50 45 L35 80 Z" />
+                    </svg>
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-serif text-xl tracking-[0.25em] text-warmIvory font-bold">VELORA</span>
+                    <span class="text-[9px] tracking-[0.3em] text-gold uppercase font-mono">ARCHITECTURAL ESTATES</span>
+                </div>
+            </a>
+
+            <!-- Nav Links -->
+            <nav class="hidden md:flex items-center gap-10 text-xs tracking-[0.2em] uppercase font-medium text-sand">
+                <a href="#residences" class="hover:text-gold transition-colors">Residences</a>
+                <a href="#discovery" class="hover:text-gold transition-colors">Explore</a>
+                <a href="#map-section" class="hover:text-gold transition-colors">Locations</a>
+                <a href="#editorial" class="hover:text-gold transition-colors">Editorial</a>
+                <a href="#contact" class="hover:text-gold transition-colors">Inquire</a>
+            </nav>
+
+            <!-- Actions -->
+            <div class="flex items-center gap-4">
+                <button onclick="toggleSavedDrawer()" class="relative p-2.5 text-warmIvory hover:text-gold transition-colors border border-white/10 hover:border-gold/50 rounded-full">
+                    <i data-lucide="bookmark" class="w-4 h-4"></i>
+                    <span id="fav-badge" class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-gold text-obsidian text-[10px] font-bold flex items-center justify-center">0</span>
+                </button>
+                <a href="#contact" class="hidden sm:inline-block px-6 py-2.5 bg-gold text-obsidian font-serif text-xs font-bold tracking-[0.2em] uppercase hover:bg-champagne transition-all">
+                    PRIVATE CONSULTATION
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- SAVED PROPERTIES DRAWER MODAL -->
+    <div id="saved-drawer" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="absolute right-0 top-0 h-full w-full max-w-md bg-charcoal border-l border-gold/20 p-6 sm:p-8 flex flex-col justify-between transform translate-x-full transition-transform duration-300" id="saved-content">
+            <div>
+                <div class="flex justify-between items-center pb-6 border-b border-white/10">
+                    <h3 class="font-serif text-lg tracking-widest text-warmIvory">CURATED SELECTION</h3>
+                    <button onclick="toggleSavedDrawer()" class="text-stoneGrey hover:text-gold"><i data-lucide="x" class="w-5 h-5"></i></button>
+                </div>
+                <div id="saved-list" class="py-6 space-y-4 overflow-y-auto max-h-[60vh]">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+            <div class="space-y-4 pt-6 border-t border-white/10">
+                <button onclick="inquireSavedCollection()" class="w-full py-3.5 bg-gold text-obsidian font-serif text-xs font-bold tracking-[0.2em] uppercase hover:bg-champagne transition-all">
+                    INQUIRE ABOUT SELECTION
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main>
+        <!-- 04 — IMMERSIVE HERO SECTION -->
+        <section id="hero" class="relative min-h-screen flex items-center justify-center px-6 sm:px-12 pt-24 overflow-hidden">
+            <!-- Background Image with Dark Vignette -->
+            <div class="absolute inset-0 z-0">
+                <img id="hero-bg" src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=85&w=2400" 
+                     class="w-full h-full object-cover scale-105 transition-transform duration-1000 brightness-75" alt="Luxury Architectural Villa">
+                <div class="absolute inset-0 bg-gradient-to-t from-obsidian via-obsidian/40 to-transparent"></div>
+                <div class="absolute inset-0 bg-gradient-to-r from-obsidian/80 via-transparent to-obsidian/80"></div>
+            </div>
+
+            <!-- Hero Copy -->
+            <div class="relative z-10 max-w-5xl text-center space-y-8 mt-12">
+                <div class="inline-flex items-center gap-3 px-4 py-1.5 border border-gold/30 bg-obsidian/60 backdrop-blur-md">
+                    <span class="w-1.5 h-1.5 rounded-full bg-gold animate-ping"></span>
+                    <span class="text-[10px] tracking-[0.3em] font-mono text-gold uppercase">ARCHITECTURAL PORTFOLIO 2026</span>
+                </div>
+
+                <h1 class="font-serif text-4xl sm:text-7xl lg:text-8xl font-light tracking-wider text-warmIvory leading-[1.1] editorial-shadow">
+                    FIND A PLACE <br>
+                    <span class="font-normal italic text-gold">BEYOND ORDINARY.</span>
+                </h1>
+
+                <p class="text-sand text-sm sm:text-base font-light tracking-widest max-w-2xl mx-auto leading-relaxed">
+                    Discover exceptional residences shaped by avant-garde architecture, timeless elegance, and the refined art of living.
+                </p>
+
+                <div class="flex flex-wrap items-center justify-center gap-5 pt-4">
+                    <a href="#residences" class="px-8 py-4 bg-gold text-obsidian font-serif text-xs font-bold tracking-[0.25em] uppercase hover:bg-champagne transition-all shadow-xl">
+                        EXPLORE RESIDENCES
+                    </a>
+                    <a href="#discovery" class="px-8 py-4 bg-charcoal/80 border border-gold/30 text-warmIvory font-serif text-xs font-bold tracking-[0.25em] uppercase hover:border-gold transition-all backdrop-blur-md">
+                        DISCOVER THE COLLECTION
+                    </a>
+                </div>
+            </div>
+
+            <!-- Scroll Indicator -->
+            <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-10 flex flex-col items-center gap-2">
+                <span class="text-[9px] tracking-[0.3em] font-mono text-stoneGrey uppercase">SCROLL</span>
+                <div class="w-[1px] h-8 bg-gradient-to-b from-gold to-transparent animate-pulse"></div>
+            </div>
+        </section>
+
+        <!-- 05 — SMART PROPERTY DISCOVERY & SEARCH -->
+        <section id="discovery" class="py-16 px-6 sm:px-12 bg-charcoal border-y border-gold/15 relative z-20">
+            <div class="max-w-7xl mx-auto space-y-8">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 border-b border-white/10 pb-6">
+                    <div>
+                        <span class="text-[10px] tracking-[0.3em] text-gold uppercase font-mono">CURATED SEARCH</span>
+                        <h2 class="font-serif text-2xl sm:text-3xl text-warmIvory tracking-wide">FILTER THE COLLECTION</h2>
+                    </div>
+                    <button onclick="resetFilters()" class="text-xs text-stoneGrey hover:text-gold tracking-widest uppercase flex items-center gap-2">
+                        <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> RESET ALL FILTERS
+                    </button>
+                </div>
+
+                <!-- Filters Bar -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <!-- Location Filter -->
+                    <div class="space-y-2">
+                        <label class="text-[10px] tracking-widest text-stoneGrey uppercase">LOCATION</label>
+                        <select id="filter-location" onchange="applyFilters()" class="w-full bg-obsidian border border-white/15 text-warmIvory p-3 text-xs tracking-wider focus:border-gold focus:outline-none">
+                            <option value="all">ALL LOCATIONS</option>
+                            <option value="French Riviera">French Riviera, France</option>
+                            <option value="Beverly Hills">Beverly Hills, USA</option>
+                            <option value="Lake Como">Lake Como, Italy</option>
+                            <option value="Ibiza">Ibiza, Spain</option>
+                            <option value="Zurich">Zurich, Switzerland</option>
+                        </select>
+                    </div>
+
+                    <!-- Property Type -->
+                    <div class="space-y-2">
+                        <label class="text-[10px] tracking-widest text-stoneGrey uppercase">PROPERTY TYPE</label>
+                        <select id="filter-type" onchange="applyFilters()" class="w-full bg-obsidian border border-white/15 text-warmIvory p-3 text-xs tracking-wider focus:border-gold focus:outline-none">
+                            <option value="all">ALL TYPES</option>
+                            <option value="Contemporary Villa">Contemporary Villa</option>
+                            <option value="Penthouse">Penthouse</option>
+                            <option value="Modern Mansion">Modern Mansion</option>
+                            <option value="Waterfront Estate">Waterfront Estate</option>
+                        </select>
+                    </div>
+
+                    <!-- Bedrooms -->
+                    <div class="space-y-2">
+                        <label class="text-[10px] tracking-widest text-stoneGrey uppercase">BEDROOMS</label>
+                        <select id="filter-beds" onchange="applyFilters()" class="w-full bg-obsidian border border-white/15 text-warmIvory p-3 text-xs tracking-wider focus:border-gold focus:outline-none">
+                            <option value="all">ANY BEDROOMS</option>
+                            <option value="3">3+ Bedrooms</option>
+                            <option value="5">5+ Bedrooms</option>
+                            <option value="6">6+ Bedrooms</option>
+                        </select>
+                    </div>
+
+                    <!-- Price Range -->
+                    <div class="space-y-2">
+                        <label class="text-[10px] tracking-widest text-stoneGrey uppercase">MAX PRICE ($)</label>
+                        <select id="filter-price" onchange="applyFilters()" class="w-full bg-obsidian border border-white/15 text-warmIvory p-3 text-xs tracking-wider focus:border-gold focus:outline-none">
+                            <option value="all">ANY PRICE</option>
+                            <option value="15000000">Up to $15,000,000</option>
+                            <option value="25000000">Up to $25,000,000</option>
+                            <option value="40000000">Up to $40,000,000</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 06 — FEATURED RESIDENCES (EDITORIAL GRID) -->
+        <section id="residences" class="py-24 px-6 sm:px-12 bg-obsidian">
+            <div class="max-w-7xl mx-auto space-y-16">
+                <!-- Section Title -->
+                <div class="text-center max-w-2xl mx-auto space-y-4">
+                    <span class="text-[10px] tracking-[0.3em] font-mono text-gold uppercase">CURATED SELECTION</span>
+                    <h2 class="font-serif text-3xl sm:text-5xl font-light text-warmIvory tracking-wide">
+                        DISTINCTIVE RESIDENCES
+                    </h2>
+                    <p class="text-stoneGrey text-xs sm:text-sm font-light tracking-widest">
+                        Handcrafted architectural masterpieces defined by volume, precision, and breathtaking surroundings.
+                    </p>
+                </div>
+
+                <!-- Dynamic Residence Grid -->
+                <div id="property-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Cards rendered via JS -->
+                </div>
+
+                <!-- Empty State -->
+                <div id="empty-state" class="hidden text-center py-16 space-y-4 border border-white/10 bg-charcoal p-8">
+                    <i data-lucide="search-x" class="w-12 h-12 text-gold mx-auto stroke-1"></i>
+                    <h3 class="font-serif text-xl text-warmIvory">NO RESIDENCES MATCH YOUR CRITERIA</h3>
+                    <p class="text-stoneGrey text-xs max-w-md mx-auto">Try adjusting your filters or search terms to discover available architectural properties.</p>
+                    <button onclick="resetFilters()" class="px-6 py-2.5 bg-gold text-obsidian font-serif text-xs font-bold tracking-widest uppercase">
+                        RESET ALL FILTERS
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 07 & 15 — PROPERTY DETAIL MODAL -->
+        <div id="detail-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-xl opacity-0 pointer-events-none transition-opacity duration-300 overflow-y-auto">
+            <div class="min-h-screen px-4 sm:px-12 py-12 flex items-center justify-center">
+                <div class="bg-charcoal border border-gold/30 max-w-5xl w-full p-6 sm:p-10 relative space-y-8 my-auto" id="modal-content">
+                    <button onclick="closeDetailModal()" class="absolute top-6 right-6 p-2 text-stoneGrey hover:text-gold transition-colors">
+                        <i data-lucide="x" class="w-6 h-6"></i>
+                    </button>
+
+                    <!-- Main Gallery Image Swapper -->
+                    <div class="space-y-4">
+                        <div class="h-[50vh] sm:h-[60vh] overflow-hidden relative border border-white/10">
+                            <img id="modal-main-img" src="" class="w-full h-full object-cover" alt="Property Main">
+                            <div class="absolute bottom-4 left-4 bg-obsidian/80 backdrop-blur-md px-4 py-2 border border-gold/30 font-serif text-gold text-lg" id="modal-price"></div>
+                        </div>
+                        <div id="modal-thumbs" class="flex gap-3 overflow-x-auto pb-2">
+                            <!-- Thumbnails injected dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Meta & Details -->
+                    <div class="grid md:grid-cols-12 gap-8 border-t border-white/10 pt-6">
+                        <div class="md:col-span-8 space-y-4">
+                            <div class="space-y-1">
+                                <span class="text-xs text-gold font-mono uppercase tracking-widest" id="modal-location"></span>
+                                <h2 class="font-serif text-2xl sm:text-4xl text-warmIvory" id="modal-title"></h2>
+                            </div>
+                            <p class="text-stoneGrey text-xs sm:text-sm leading-relaxed" id="modal-desc"></p>
+
+                            <!-- Specs Grid -->
+                            <div class="grid grid-cols-4 gap-4 py-4 border-y border-white/10 font-serif text-xs">
+                                <div>
+                                    <span class="text-stoneGrey text-[10px] block">BEDROOMS</span>
+                                    <span class="text-warmIvory font-bold" id="modal-beds"></span>
+                                </div>
+                                <div>
+                                    <span class="text-stoneGrey text-[10px] block">BATHROOMS</span>
+                                    <span class="text-warmIvory font-bold" id="modal-baths"></span>
+                                </div>
+                                <div>
+                                    <span class="text-stoneGrey text-[10px] block">INTERIOR AREA</span>
+                                    <span class="text-warmIvory font-bold" id="modal-sqm"></span>
+                                </div>
+                                <div>
+                                    <span class="text-stoneGrey text-[10px] block">TYPE</span>
+                                    <span class="text-warmIvory font-bold" id="modal-type"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CTA Box -->
+                        <div class="md:col-span-4 bg-obsidian p-6 border border-gold/20 flex flex-col justify-between space-y-6">
+                            <div class="space-y-2">
+                                <h4 class="font-serif text-sm text-warmIvory uppercase tracking-widest">PRIVATE ENQUIRY</h4>
+                                <p class="text-stoneGrey text-xs">Request a confidential dossier or private viewing.</p>
+                            </div>
+                            <button onclick="inquirePropertyFromModal()" class="w-full py-3.5 bg-gold text-obsidian font-serif text-xs font-bold tracking-widest uppercase hover:bg-champagne transition-all">
+                                SCHEDULE PRIVATE VIEWING
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 08 — EXPLORE BY LOCATION (MAP INTERACTIVE) -->
+        <section id="map-section" class="py-24 px-6 sm:px-12 bg-charcoal border-t border-gold/15">
+            <div class="max-w-7xl mx-auto space-y-12">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+                    <div class="space-y-2">
+                        <span class="text-[10px] tracking-[0.3em] font-mono text-gold uppercase">GEOGRAPHIC DISCOVERY</span>
+                        <h2 class="font-serif text-3xl sm:text-5xl font-light text-warmIvory">WORLDWIDE DESTINATIONS</h2>
+                    </div>
+                    <p class="text-stoneGrey text-xs sm:text-sm max-w-md font-light">
+                        Select a destination on our interactive architectural map to preview available private estates.
+                    </p>
+                </div>
+
+                <!-- Stylized Map Canvas View -->
+                <div class="relative bg-obsidian border border-gold/20 h-[450px] rounded-none overflow-hidden p-8 flex items-center justify-center">
+                    <!-- Map Lines Graphic -->
+                    <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#D4AF37_1px,transparent_1px)] [background-size:24px_24px]"></div>
+
+                    <!-- Map Pins -->
+                    <div class="absolute inset-0">
+                        <!-- Riviera Pin -->
+                        <button onclick="previewLocationPin('French Riviera')" class="absolute top-[40%] left-[30%] group">
+                            <div class="w-4 h-4 rounded-full bg-gold/30 flex items-center justify-center group-hover:scale-150 transition-transform">
+                                <div class="w-2 h-2 rounded-full bg-gold animate-ping"></div>
+                            </div>
+                            <span class="absolute top-6 left-1/2 -translate-x-1/2 text-[10px] font-mono text-gold bg-obsidian/90 px-2 py-0.5 border border-gold/40 whitespace-nowrap">French Riviera (2)</span>
+                        </button>
+
+                        <!-- Beverly Hills Pin -->
+                        <button onclick="previewLocationPin('Beverly Hills')" class="absolute top-[35%] left-[65%] group">
+                            <div class="w-4 h-4 rounded-full bg-gold/30 flex items-center justify-center group-hover:scale-150 transition-transform">
+                                <div class="w-2 h-2 rounded-full bg-gold"></div>
+                            </div>
+                            <span class="absolute top-6 left-1/2 -translate-x-1/2 text-[10px] font-mono text-gold bg-obsidian/90 px-2 py-0.5 border border-gold/40 whitespace-nowrap">Beverly Hills (2)</span>
+                        </button>
+
+                        <!-- Lake Como Pin -->
+                        <button onclick="previewLocationPin('Lake Como')" class="absolute top-[60%] left-[48%] group">
+                            <div class="w-4 h-4 rounded-full bg-gold/30 flex items-center justify-center group-hover:scale-150 transition-transform">
+                                <div class="w-2 h-2 rounded-full bg-gold"></div>
+                            </div>
+                            <span class="absolute top-6 left-1/2 -translate-x-1/2 text-[10px] font-mono text-gold bg-obsidian/90 px-2 py-0.5 border border-gold/40 whitespace-nowrap">Lake Como (1)</span>
+                        </button>
+                    </div>
+
+                    <div class="relative z-10 text-center space-y-2 pointer-events-none">
+                        <span class="text-xs text-stoneGrey tracking-widest uppercase font-mono">INTERACTIVE GLOBE VIEW</span>
+                        <p class="text-xs text-gold">Click any location indicator above to inspect private estates</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 10 — INTERACTIVE FLOOR PLANS SECTION -->
+        <section id="floorplans" class="py-24 px-6 sm:px-12 bg-obsidian">
+            <div class="max-w-7xl mx-auto space-y-12">
+                <div class="text-center max-w-2xl mx-auto space-y-3">
+                    <span class="text-[10px] tracking-[0.3em] font-mono text-gold uppercase">ARCHITECTURAL BLUEPRINTS</span>
+                    <h2 class="font-serif text-3xl sm:text-5xl font-light text-warmIvory">SPACE &amp; FLOW ANALYSIS</h2>
+                </div>
+
+                <div class="grid lg:grid-cols-12 gap-8 items-center bg-charcoal p-8 border border-white/10">
+                    <div class="lg:col-span-5 space-y-6">
+                        <div class="space-y-2">
+                            <span class="text-xs font-mono text-gold uppercase tracking-widest">EXAMPLE SPECIFICATION</span>
+                            <h3 class="font-serif text-2xl text-warmIvory">VILLA LUMINA — LEVEL 02</h3>
+                        </div>
+                        <p class="text-stoneGrey text-xs sm:text-sm leading-relaxed">
+                            Designed around open-concept sightlines prioritizing natural light penetration, seamless indoor-outdoor transitions, and master suite privacy.
+                        </p>
+
+                        <!-- Interactive Room Buttons -->
+                        <div class="space-y-2">
+                            <button onclick="highlightRoom('living')" class="w-full p-3 bg-obsidian border border-white/10 hover:border-gold text-left font-serif text-xs text-warmIvory flex justify-between">
+                                <span>01 / Main Living Atrium</span>
+                                <span class="text-gold">140 m²</span>
+                            </button>
+                            <button onclick="highlightRoom('master')" class="w-full p-3 bg-obsidian border border-white/10 hover:border-gold text-left font-serif text-xs text-warmIvory flex justify-between">
+                                <span>02 / Master Sanctuary &amp; Terrace</span>
+                                <span class="text-gold">95 m²</span>
+                            </button>
+                            <button onclick="highlightRoom('pool')" class="w-full p-3 bg-obsidian border border-white/10 hover:border-gold text-left font-serif text-xs text-warmIvory flex justify-between">
+                                <span>03 / Infinity Deck &amp; Pavilion</span>
+                                <span class="text-gold">210 m²</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Floor Plan Graphic Box -->
+                    <div class="lg:col-span-7 bg-obsidian p-8 border border-gold/20 flex flex-col items-center justify-center min-h-[350px] relative">
+                        <svg class="w-full max-w-md h-64 text-gold/60" viewBox="0 0 400 300" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <rect x="20" y="20" width="360" height="260" stroke="#D4AF37" stroke-width="2" />
+                            <rect id="fp-living" x="40" y="40" width="180" height="130" class="transition-all duration-300 fill-gold/10 stroke-gold" />
+                            <rect id="fp-master" x="230" y="40" width="130" height="130" class="transition-all duration-300 fill-transparent stroke-gold" />
+                            <rect id="fp-pool" x="40" y="180" width="320" height="80" class="transition-all duration-300 fill-transparent stroke-gold" />
+                            <text x="70" y="110" fill="#F9F8F3" font-size="12" font-family="Cinzel">ATRIUM</text>
+                            <text x="250" y="110" fill="#F9F8F3" font-size="12" font-family="Cinzel">SUITE</text>
+                            <text x="140" y="235" fill="#F9F8F3" font-size="12" font-family="Cinzel">INFINITY DECK</text>
+                        </svg>
+                        <span id="room-detail" class="mt-4 font-mono text-xs text-gold uppercase tracking-widest">Select a space to view architectural dimensions</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 09 — ARCHITECTURAL EDITORIAL SECTION -->
+        <section id="editorial" class="py-24 px-6 sm:px-12 bg-charcoal border-t border-white/10">
+            <div class="max-w-7xl mx-auto space-y-16">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+                    <div class="space-y-2">
+                        <span class="text-[10px] tracking-[0.3em] font-mono text-gold uppercase">JOURNAL &amp; ESSAYS</span>
+                        <h2 class="font-serif text-3xl sm:text-5xl font-light text-warmIvory">ARCHITECTURAL ESSAYS</h2>
+                    </div>
+                    <span class="text-xs text-stoneGrey font-mono">ISSUE NO. 04 — 2026</span>
+                </div>
+
+                <!-- Editorial Articles Grid -->
+                <div class="grid md:grid-cols-2 gap-12">
+                    <!-- Article 1 -->
+                    <article class="space-y-6 group cursor-pointer">
+                        <div class="h-80 overflow-hidden relative border border-white/10">
+                            <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=1200" 
+                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Minimalism">
+                        </div>
+                        <div class="space-y-3">
+                            <span class="text-[10px] font-mono text-gold uppercase tracking-widest">ESSAY 01 • ESSENTIALISM</span>
+                            <h3 class="font-serif text-2xl text-warmIvory group-hover:text-gold transition-colors">THE BEAUTY OF MINIMALIST VOLUMES</h3>
+                            <p class="text-stoneGrey text-xs sm:text-sm leading-relaxed">
+                                How contemporary architects are stripping away excess to reveal the emotional essence of shadow, light, and raw natural stone.
+                            </p>
+                        </div>
+                    </article>
+
+                    <!-- Article 2 -->
+                    <article class="space-y-6 group cursor-pointer">
+                        <div class="h-80 overflow-hidden relative border border-white/10">
+                            <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1200" 
+                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Mediterranean">
+                        </div>
+                        <div class="space-y-3">
+                            <span class="text-[10px] font-mono text-gold uppercase tracking-widest">ESSAY 02 • COASTAL LIVING</span>
+                            <h3 class="font-serif text-2xl text-warmIvory group-hover:text-gold transition-colors">MEDITERRANEAN ELEGANCE REDEFINED</h3>
+                            <p class="text-stoneGrey text-xs sm:text-sm leading-relaxed">
+                                Blending historic coastal geometry with expansive glass technology to merge indoor sanctuaries directly with sea horizons.
+                            </p>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- 14 — PHILOSOPHY SECTION -->
+        <section class="py-24 px-6 sm:px-12 bg-obsidian relative overflow-hidden text-center border-t border-gold/15">
+            <div class="max-w-4xl mx-auto space-y-8 relative z-10">
+                <span class="text-[10px] tracking-[0.3em] font-mono text-gold uppercase">OUR PHILOSOPHY</span>
+                <h2 class="font-serif text-3xl sm:text-6xl font-light text-warmIvory leading-tight">
+                    MORE THAN A RESIDENCE. <br>
+                    <span class="italic text-gold">A WAY OF LIVING.</span>
+                </h2>
+                <p class="text-sand text-xs sm:text-sm max-w-2xl mx-auto font-light leading-relaxed">
+                    We believe luxury is not defined by ornament, but by spatial harmony, absolute privacy, and uncompromised architectural clarity.
+                </p>
+            </div>
+        </section>
+
+        <!-- 16 — PRIVATE CONSULTATION & CONTACT FORM -->
+        <section id="contact" class="py-24 px-6 sm:px-12 bg-charcoal">
+            <div class="max-w-4xl mx-auto space-y-12">
+                <div class="text-center space-y-3">
+                    <span class="text-[10px] tracking-[0.3em] font-mono text-gold uppercase">CONFIDENTIAL ADVISORY</span>
+                    <h2 class="font-serif text-3xl sm:text-5xl font-light text-warmIvory">REQUEST PRIVATE CONSULTATION</h2>
+                </div>
+
+                <form id="inquiry-form" onsubmit="submitInquiry(event)" class="space-y-6 bg-obsidian p-8 border border-gold/20">
+                    <div class="grid sm:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-mono text-stoneGrey uppercase">FULL NAME</label>
+                            <input type="text" required placeholder="Lord / Lady / Mr. / Ms." class="w-full bg-charcoal border border-white/15 text-warmIvory p-3.5 text-xs focus:border-gold focus:outline-none">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-mono text-stoneGrey uppercase">EMAIL ADDRESS</label>
+                            <input type="email" required placeholder="client@private.com" class="w-full bg-charcoal border border-white/15 text-warmIvory p-3.5 text-xs focus:border-gold focus:outline-none">
+                        </div>
+                    </div>
+
+        <!-- 17 — FINAL SIGNATURE / CREATOR CREDIT -->
+        <footer class="bg-obsidian border-t border-gold/20 py-16 px-6 sm:px-12 text-center relative overflow-hidden">
+            <div class="max-w-7xl mx-auto space-y-8">
+                <div class="flex items-center justify-center gap-3">
+                    <svg class="w-6 h-6 text-gold" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4">
+                        <path d="M20 80 L50 20 L80 80 L65 80 L50 45 L35 80 Z" />
+                    </svg>
+                    <span class="font-serif text-lg tracking-[0.3em] text-warmIvory font-bold">VELORA</span>
+                </div>
+
+                <p class="text-stoneGrey text-xs font-light max-w-md mx-auto">
+                    Architectural portfolio showcasing exceptional residential real estate concepts worldwide.
+                </p>
+
+                <div class="w-12 h-[1px] bg-gold/40 mx-auto"></div>
+
+                <!-- MANDATORY EXACT CREATOR CREDIT -->
+                <div class="space-y-1 font-serif">
+                    <div class="text-[9px] tracking-[0.3em] font-mono text-stoneGrey uppercase">DESIGN &amp; CREATIVE DIRECTION</div>
+                    <div class="text-sm tracking-[0.25em] text-gold font-bold">Nadir Salaheddine</div>
+                </div>
+
+                <p class="text-[10px] font-mono text-stoneGrey/60">© 2026 VELORA ARCHITECTURAL ESTATES. ALL RIGHTS RESERVED.</p>
+            </div>
+        </footer>
+    </main>
+
+    <!-- 17 — FINAL SIGNATURE / CREATOR CREDIT -->
+    <footer class="bg-obsidian border-t border-gold/20 py-16 px-6 sm:px-12 text-center relative overflow-hidden">
+        <div class="max-w-7xl mx-auto space-y-8">
+            <div class="flex items-center justify-center gap-3">
+                <svg class="w-6 h-6 text-gold" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4">
+                    <path d="M20 80 L50 20 L80 80 L65 80 L50 45 L35 80 Z" />
+                </svg>
+                <span class="font-serif text-lg tracking-[0.3em] text-warmIvory font-bold">VELORA</span>
+            </div>
+
+            <p class="text-stoneGrey text-xs font-light max-w-md mx-auto">
+                Architectural portfolio showcasing exceptional residential real estate concepts worldwide.
+            </p>
+
+            <div class="w-12 h-[1px] bg-gold/40 mx-auto"></div>
+
+            <!-- MANDATORY EXACT CREATOR CREDIT -->
+            <div class="space-y-1 font-serif">
+                <div class="text-[9px] tracking-[0.3em] font-mono text-stoneGrey uppercase">DESIGN &amp; CREATIVE DIRECTION</div>
+                <div class="text-sm tracking-[0.25em] text-gold font-bold">Nadir Salaheddine</div>
+            </div>
+
+            <p class="text-[10px] font-mono text-stoneGrey/60">© 2026 VELORA ARCHITECTURAL ESTATES. ALL RIGHTS RESERVED.</p>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
+
+        // Sample Fictional Luxury Property Data
+        const properties = [
+            {
+                id: 'p1',
+                title: 'VILLA LUMINA',
+                location: 'French Riviera',
+                type: 'Contemporary Villa',
+                price: 24500000,
+                priceFormatted: '$24,500,000',
+                beds: 6,
+                baths: 7,
+                sqm: '1,120 m²',
+                img: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1200',
+                gallery: [
+                    'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1200',
+                    'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=1200',
+                    'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&q=80&w=1200'
+                ],
+                desc: 'An architectural statement perched above the Mediterranean. Features floor-to-ceiling glass walls, a cantilevered infinity deck, and a private subterranean spa.'
+            },
+            {
+                id: 'p2',
+                title: 'THE BEL-AIR PAVILION',
+                location: 'Beverly Hills',
+                type: 'Modern Mansion',
+                price: 38000000,
+                priceFormatted: '$38,000,000',
+                beds: 7,
+                baths: 9,
+                sqm: '1,450 m²',
+                img: 'https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&q=80&w=1200',
+                gallery: [
+                    'https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&q=80&w=1200',
+                    'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1200'
+                ],
+                desc: 'A minimal sanctuary in the hills. Designed with organic stone facades, dual infinity pools, and a 12-car subterranean collector garage.'
+            },
+            {
+                id: 'p3',
+                title: 'PALAZZO SERENO',
+                location: 'Lake Como',
+                type: 'Waterfront Estate',
+                price: 18900000,
+                priceFormatted: '$18,900,000',
+                beds: 5,
+                baths: 6,
+                sqm: '920 m²',
+                img: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1200',
+                gallery: [
+                    'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1200',
+                    'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=1200'
+                ],
+                desc: 'Direct lake access with private boat dock. Historic Italian proportions reimagined with ultra-modern interior geometry and private gardens.'
+            },
+            {
+                id: 'p4',
+                title: 'PENTHOUSE AURA',
+                location: 'Zurich',
+                type: 'Penthouse',
+                price: 14200000,
+                priceFormatted: '$14,200,000',
+                beds: 4,
+                baths: 4,
+                sqm: '680 m²',
+                img: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&q=80&w=1200',
+                gallery: [
+                    'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&q=80&w=1200',
+                    'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&q=80&w=1200'
+                ],
+                desc: 'Triple-aspect sky residence featuring panoramic Alpine vistas, private elevator access, and a heated rooftop plunge pool.'
+            },
+            {
+                id: 'p5',
+                title: 'VILLA HORIZON',
+                location: 'Ibiza',
+                type: 'Contemporary Villa',
+                price: 16500000,
+                priceFormatted: '$16,500,000',
+                beds: 5,
+                baths: 5,
+                sqm: '850 m²',
+                img: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=80&w=1200',
+                gallery: [
+                    'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=80&w=1200'
+                ],
+                desc: 'Raw concrete and warm teak wood synthesize in this cliffside sanctuary overlooking the Mediterranean sunset.'
+            },
+            {
+                id: 'p6',
+                title: 'THE RIVIERA SANCTUARY',
+                location: 'French Riviera',
+                type: 'Waterfront Estate',
+                price: 29000000,
+                priceFormatted: '$29,000,000',
+                beds: 6,
+                baths: 8,
+                sqm: '1,300 m²',
+                img: 'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&q=80&w=1200',
+                gallery: [
+                    'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&q=80&w=1200'
+                ],
+                desc: 'Secluded hilltop domain offering total privacy, helipad landing platform, and private olive groves.'
+            }
+        ];
+
+        // Favorites State
+        let savedPropIds = [];
+
+        // --- WOW OPENING SEQUENCE ---
+        function runLoader() {
+            let count = 1;
+            const counterEl = document.getElementById('loader-counter');
+            const barEl = document.getElementById('loader-bar');
+
+            // Animate Title
+            gsap.to('#loader-title', { y: '0%', duration: 1, ease: 'power3.out', delay: 0.2 });
+            gsap.to('#loader-sub', { opacity: 1, duration: 1, delay: 0.5 });
+
+            const timer = setInterval(() => {
+                count += 3;
+                if (count > 100) count = 100;
+                counterEl.innerText = count < 10 ? `0${count}` : count;
+                barEl.style.width = `${count}%`;
+
+                if (count >= 100) {
+                    clearInterval(timer);
+                    setTimeout(skipLoader, 400);
+                }
+            }, 30);
+        }
+
+        function skipLoader() {
+            const loader = document.getElementById('loader');
+            loader.style.opacity = '0';
+            setTimeout(() => loader.style.display = 'none', 700);
+        }
+
+        window.onload = () => {
+            runLoader();
+            renderProperties(properties);
+        };
+
+        // --- CUSTOM POINTER LOGIC ---
+        const cursor = document.getElementById('cursor');
+        const cursorDot = document.getElementById('cursor-dot');
+        window.addEventListener('mousemove', (e) => {
+            if (cursor && cursorDot) {
+                cursor.style.left = `${e.clientX}px`;
+                cursor.style.top = `${e.clientY}px`;
+                cursorDot.style.left = `${e.clientX}px`;
+                cursorDot.style.top = `${e.clientY}px`;
+            }
+        });
+
+        // --- RENDER PROPERTIES GRID ---
+        function renderProperties(items) {
+            const grid = document.getElementById('property-grid');
+            const emptyState = document.getElementById('empty-state');
+
+            if (items.length === 0) {
+                grid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            grid.innerHTML = items.map(p => {
+                const isFav = savedPropIds.includes(p.id);
+                return `
+                    <div class="bg-charcoal border border-white/10 group hover:border-gold/50 transition-all duration-500 flex flex-col justify-between">
+                        <div class="relative h-72 overflow-hidden cursor-pointer" onclick="openDetailModal('${p.id}')">
+                            <img src="${p.img}" alt="${p.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                            <div class="absolute inset-0 bg-gradient-to-t from-charcoal via-transparent to-transparent"></div>
+                            <div class="absolute top-4 left-4 bg-obsidian/80 backdrop-blur-md px-3 py-1 text-[10px] font-mono text-gold border border-gold/30 uppercase">
+                                ${p.type}
+                            </div>
+                            <button onclick="event.stopPropagation(); toggleSave('${p.id}')" class="absolute top-4 right-4 p-2.5 rounded-full bg-obsidian/80 text-warmIvory hover:text-gold border border-white/10">
+                                <i data-lucide="bookmark" class="w-4 h-4 ${isFav ? 'fill-gold text-gold' : ''}"></i>
+                            </button>
+                        </div>
+                        <div class="p-6 space-y-4">
+                            <div>
+                                <span class="text-[10px] font-mono text-stoneGrey uppercase tracking-widest">${p.location}</span>
+                                <h3 class="font-serif text-xl text-warmIvory group-hover:text-gold transition-colors">${p.title}</h3>
+                            </div>
+                            <p class="text-stoneGrey text-xs line-clamp-2">${p.desc}</p>
+                            <div class="flex justify-between items-center pt-4 border-t border-white/10 font-serif">
+                                <span class="text-gold font-bold text-lg">${p.priceFormatted}</span>
+                                <button onclick="openDetailModal('${p.id}')" class="text-xs text-warmIvory hover:text-gold uppercase tracking-widest">
+                                    VIEW DOSSIER →
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            lucide.createIcons();
+        }
+
+        // --- FILTERING LOGIC ---
+        function applyFilters() {
+            const loc = document.getElementById('filter-location').value;
+            const type = document.getElementById('filter-type').value;
+            const beds = document.getElementById('filter-beds').value;
+            const price = document.getElementById('filter-price').value;
+
+            const filtered = properties.filter(p => {
+                if (loc !== 'all' && p.location !== loc) return false;
+                if (type !== 'all' && p.type !== type) return false;
+                if (beds !== 'all' && p.beds < parseInt(beds)) return false;
+                if (price !== 'all' && p.price > parseInt(price)) return false;
+                return true;
+            });
+
+            renderProperties(filtered);
+        }
+
+        function resetFilters() {
+            document.getElementById('filter-location').value = 'all';
+            document.getElementById('filter-type').value = 'all';
+            document.getElementById('filter-beds').value = 'all';
+            document.getElementById('filter-price').value = 'all';
+            renderProperties(properties);
+        }
+
+        // --- SAVED / FAVORITES DRAWER ---
+        function toggleSave(id) {
+            if (savedPropIds.includes(id)) {
+                savedPropIds = savedPropIds.filter(item => item !== id);
+            } else {
+                savedPropIds.push(id);
+            }
+            document.getElementById('fav-badge').innerText = savedPropIds.length;
+            renderProperties(properties);
+            updateSavedDrawerList();
+        }
+
+        function toggleSavedDrawer() {
+            const drawer = document.getElementById('saved-drawer');
+            const content = document.getElementById('saved-content');
+            if (drawer.classList.contains('pointer-events-none')) {
+                drawer.classList.remove('pointer-events-none', 'opacity-0');
+                content.classList.remove('translate-x-full');
+            } else {
+                drawer.classList.add('pointer-events-none', 'opacity-0');
+                content.classList.add('translate-x-full');
+            }
+        }
+
+        function updateSavedDrawerList() {
+            const list = document.getElementById('saved-list');
+            const savedProps = properties.filter(p => savedPropIds.includes(p.id));
+
+            if (savedProps.length === 0) {
+                list.innerHTML = `<p class="text-xs text-stoneGrey font-mono text-center py-8">NO SAVED RESIDENCES IN YOUR SELECTION.</p>`;
+                return;
+            }
+
+            list.innerHTML = savedProps.map(p => `
+                <div class="flex items-center gap-4 p-3 bg-obsidian border border-white/10">
+                    <img src="${p.img}" class="w-16 h-16 object-cover">
+                    <div class="flex-1">
+                        <h4 class="font-serif text-xs text-warmIvory">${p.title}</h4>
+                        <span class="text-gold text-xs font-serif">${p.priceFormatted}</span>
+                    </div>
+                    <button onclick="toggleSave('${p.id}')" class="text-stoneGrey hover:text-red-400"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function inquireSavedCollection() {
+            toggleSavedDrawer();
+            document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // --- PROPERTY DETAIL MODAL ---
+        function openDetailModal(id) {
+            const p = properties.find(item => item.id === id);
+            if (!p) return;
+
+            document.getElementById('modal-main-img').src = p.img;
+            document.getElementById('modal-price').innerText = p.priceFormatted;
+            document.getElementById('modal-title').innerText = p.title;
+            document.getElementById('modal-location').innerText = p.location;
+            document.getElementById('modal-desc').innerText = p.desc;
+            document.getElementById('modal-beds').innerText = `${p.beds} Beds`;
+            document.getElementById('modal-baths').innerText = `${p.baths} Baths`;
+            document.getElementById('modal-sqm').innerText = p.sqm;
+            document.getElementById('modal-type').innerText = p.type;
+
+            const thumbs = document.getElementById('modal-thumbs');
+            thumbs.innerHTML = p.gallery.map(g => `
+                <img src="${g}" onclick="document.getElementById('modal-main-img').src='${g}'" class="w-20 h-14 object-cover border border-white/20 hover:border-gold cursor-pointer">
+            `).join('');
+
+            const modal = document.getElementById('detail-modal');
+            modal.classList.remove('pointer-events-none', 'opacity-0');
+        }
+
+        function closeDetailModal() {
+            const modal = document.getElementById('detail-modal');
+            modal.classList.add('pointer-events-none', 'opacity-0');
+        }
+
+        function inquirePropertyFromModal() {
+            closeDetailModal();
+            document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // --- MAP LOCATION PREVIEW ---
+        function previewLocationPin(locationName) {
+            document.getElementById('filter-location').value = locationName;
+            applyFilters();
+            document.getElementById('residences').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // --- INTERACTIVE FLOOR PLAN HIGHLIGHTS ---
+        function highlightRoom(room) {
+            const l = document.getElementById('fp-living');
+            const m = document.getElementById('fp-master');
+            const p = document.getElementById('fp-pool');
+            const desc = document.getElementById('room-detail');
+
+            l.setAttribute('fill', 'transparent');
+            m.setAttribute('fill', 'transparent');
+            p.setAttribute('fill', 'transparent');
+
+            if (room === 'living') {
+                l.setAttribute('fill', 'rgba(212, 175, 55, 0.3)');
+                desc.innerText = "ATRIUM: 140 m² • Double-height ceilings with integrated art walls";
+            } else if (room === 'master') {
+                m.setAttribute('fill', 'rgba(212, 175, 55, 0.3)');
+                desc.innerText = "MASTER SUITE: 95 m² • Panoramic terrace & dual dressing rooms";
+            } else if (room === 'pool') {
+                p.setAttribute('fill', 'rgba(212, 175, 55, 0.3)');
+                desc.innerText = "INFINITY DECK: 210 m² • Heated saltwater infinity pool & outdoor kitchen";
+            }
+        }
+
+        // --- FORM INQUIRY SUBMISSION ---
+        function submitInquiry(e) {
+            e.preventDefault();
+            const toast = document.getElementById('form-toast');
+            toast.classList.remove('hidden');
+            e.target.reset();
+            setTimeout(() => toast.classList.add('hidden'), 5000);
+        }
+    </script>
+</body>
+</html>
